@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nginx-deployment
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: nginx-latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MYSQL_HOST
+              value: nginx-deployment-mysql
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: root-password
+            - name: MYSQL_DB
+              value: {{ .Values.mysql.database }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  root-password: {{ .Values.mysql.rootPassword | b64enc | quote }}

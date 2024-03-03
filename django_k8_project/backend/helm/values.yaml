@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: gazen
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+mysql:
+  image:
+    repository: mysql
+    tag: 5.7
+    pullPolicy: IfNotPresent
+  rootPassword: rootpassword
+  database: mydatabase

@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: gazen
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
